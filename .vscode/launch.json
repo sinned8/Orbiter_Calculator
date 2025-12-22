@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Orbital Planner (Windows)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/orbital_planner.exe",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb.exe",
+      "preLaunchTask": "build orbital_planner"
+    }
+  ]
+}
