@@ -6,7 +6,7 @@ CXXFLAGS := -std=c++17 -Wall -Wextra -pedantic -O2
 TARGET   := orbital_planner
 
 # Source files
-SRCS := main.cpp Body.cpp Orbit.cpp 
+SRCS := main.cpp Body.cpp Orbit.cpp Rocket.cpp
 
 # Object files
 OBJS := $(SRCS:.cpp=.o)

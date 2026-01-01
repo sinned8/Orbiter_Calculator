@@ -8,16 +8,21 @@
 
 #include "Body.h"
 #include "Orbit.h"
+#include "Rocket.h"
 
 const double PI = 3.14159265358979323846;
+
+const double g0 = 9.80665; // force of gravity 
 
 using namespace std;
 
 struct Missions
 {
     // will store final delta v , the body , and orbit info and then store that into a vector
+    int missionNumber;
     double finalDeltaV;
     string PlanetName;
+
   
 };
 
@@ -28,6 +33,10 @@ void listAllPlanets(const vector<Body> &PlanetBodies);
 void circularOrbitInfo(const vector<Body> &PlanetBodies);
 
 void hohmannTransfer(const vector<Body> &PlanetBodies);
+
+void createRocketFromUser(vector <Rocket> &ProgramRockets);
+
+void checkMissionFeasibility(const vector <Rocket> &ProgramRockets, const vector <Missions> &userMission);
 
 int main()
 {
@@ -41,13 +50,15 @@ int main()
                                 Body("Moon",  4.903e12, 1737.4)};
 
     // uses struct to store user missions will possibly use this in a text file or 
-    vector <Missions> UserMissions = {};
+    vector <Missions> UserMissions = {{1,120,"Earth"}};
+
+    vector <Rocket> ProgramRockets = {Rocket("TesterMK1" , 1200, 4800, 300)};
 
     
             
     do
     {
-        cout <<"\nPlease select one of the following options: "
+        cout <<"\n\nPlease select one of the following options: "
         <<"\n1) List Bodies."
         <<"\n2) Add a new planet / body."
         <<"\n3) Compute the circular orbit and display info."
@@ -76,11 +87,11 @@ int main()
             break;
 
         case 5:
-            
+            createRocketFromUser(ProgramRockets);
             break;
 
         case 6:
-            
+            checkMissionFeasibility(ProgramRockets,UserMissions);
             break;
         
         default:
@@ -133,7 +144,6 @@ void listAllPlanets(const vector<Body> &PlanetBodies)
 
 }
 
-
 void circularOrbitInfo(const vector<Body> &PlanetBodies)
 {
     int choice;
@@ -181,7 +191,7 @@ void hohmannTransfer(const vector<Body> &PlanetBodies)
 {
     Missions newMission;
     
-    int choice;
+    int choice,userMissionNumber;
     double h1,   // initial alt
         h2,     // final alt
         a,      // transfer orbit semi-major axis
@@ -238,6 +248,83 @@ void hohmannTransfer(const vector<Body> &PlanetBodies)
     cout << "\nBased on your selection, the total delta v necessary for the manuver is: " << dvTotal 
         << "\nThe transfer time is roughly: " << transferTime;
 
+    cout << "To store this mission, please enter the mission number (integer): ";
+    cin >> userMissionNumber;
+
+    newMission.missionNumber = userMissionNumber;
     newMission.finalDeltaV = dvTotal;
     newMission.PlanetName = body.getName();
+}
+
+void createRocketFromUser(vector <Rocket> &Rockets)
+{
+    
+    string userRocketName;
+    double userDryMass, 
+        userFuelMass, 
+        userISP,
+        dvTotal;
+    
+    cout << "\nYou have selected to create a rocket, what is the dry mass of the rocket in kg? ";
+    cin >> userDryMass;
+    cout << "What is the fuel mass in kg? ";
+    cin >> userFuelMass;
+    cout << "What is the ISP? ";
+    cin >> userISP;
+    cout << "And what do you want to name your rocket? ";
+    cin.ignore();
+    getline(cin,userRocketName);
+
+    Rocket newUserRocket(userRocketName,userDryMass, userFuelMass ,userISP);
+
+    
+    dvTotal = newUserRocket.getDeltaV();
+
+    Rockets.emplace_back(userRocketName,userDryMass,userFuelMass,userISP);
+
+    cout << "Based on your rocket, here is the total delta v available: " << dvTotal;
+   
+
+}
+
+void checkMissionFeasibility(const vector <Rocket> &ProgramRockets, const vector <Missions> &userMission)
+{
+    int userMissionChoice,userRocketChoice;
+    
+    cout << "\nPlease select the mission you want to check:";
+    for(int i = 0; i < userMission.size(); ++i)
+    {
+        cout << "\nMission #: " << userMission[i].missionNumber;
+        cout << "\nDelta V Cost: " << userMission[i].finalDeltaV;
+        cout << "\nOrbiting on: " << userMission[i].PlanetName;
+    }
+    cin >> userMissionChoice;
+
+    cout << "\nNow select the rocket you want to use: ";
+    for(int i = 0; i <ProgramRockets.size(); ++i)
+    {
+        int counter = 1;
+        Rocket const &Rocket = ProgramRockets[i];
+        cout << "\nNumber: " << counter;
+        cout << "\nName: " << Rocket.getName();
+        cout << "\nDry Mass: " << Rocket.getDryMass();
+        cout << "\nFuel Mass: " << Rocket.getFuelMass();
+        cout << "\nTotal delta V: " << Rocket.getDeltaV();
+        counter++;
+    }
+    cin >> userRocketChoice;
+    Rocket const &Rocket = ProgramRockets[userRocketChoice - 1];
+
+    cout << "\nThe delta v cost for the mission is: " << userMission[userMissionChoice - 1].finalDeltaV
+        <<"\nThe available delta v for the rocket is: " << Rocket.getDeltaV();
+    if(userMission[userMissionChoice - 1].finalDeltaV > Rocket.getDeltaV())
+    {
+        cout << "The rocket cannot preform this maneuver.";
+    }
+    else
+    {
+        cout << "The rocket can preform this maneuver.";
+    }
+
+
 }
