@@ -12,7 +12,6 @@
         "-g",
         "CalculatorMain.cpp",
         "Body.cpp",
-        "Orbit.cpp",
         "Rocket.cpp",
         "-o",
         "orbital_planner.exe"
