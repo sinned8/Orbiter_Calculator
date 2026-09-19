@@ -62,10 +62,10 @@ $$
 
 where:
 
-* \(I_{sp}\) is the engine specific impulse
-* \(g_0\) is standard gravitational acceleration
-* \(m_0\) is the initial rocket mass
-* \(m_f\) is the final dry mass
+* $(I_{sp}\)$ is the engine specific impulse
+* $(g_0\)$ is standard gravitational acceleration
+* $(m_0\)$ is the initial rocket mass
+* $(m_f\)$ is the final dry mass
 
 The calculated rocket Δv can then be compared against a stored Hohmann-transfer mission to determine whether the rocket has sufficient Δv to perform the maneuver.
 
