@@ -36,7 +36,7 @@ $$
 
 where:
 
-* \(\mu\) is the gravitational parameter of the planetary body
+* $(\mu\)$ is the gravitational parameter of the planetary body
 * \(r\) is the orbital radius measured from the center of the body
 
 ### Hohmann Transfers
